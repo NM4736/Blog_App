@@ -3,12 +3,11 @@ package com.blog_Application.ServiceImpl;
 import com.blog_Application.DAO.UserRepository;
 import com.blog_Application.DTO.UserDto;
 import com.blog_Application.Entity.User;
+import com.blog_Application.Exception.ResourceNotFoundException;
 import com.blog_Application.Service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,29 +36,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUserByName(String name ) {
 
+        User user= userRepository.findByName(name).orElseThrow(()-> new ResourceNotFoundException("User with userName: ",name," does not exist"));
         userRepository.deleteByUserName(name);
     }
     @Override
     public void deleteUserById(Integer id ) {
-
-       /* Optional<User> user= Optional.ofNullable(userRepository.findById(id).orElse(null));
-        if(user.isEmpty())
-        {
-            log.info("user with {id} not present .. so can't delete non exist user",id);
-            return;
-        }*/
+        // first check user present or not
+        User user= userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User with userId: ",id.toString()," not found"));
         userRepository.deleteById(id);
     }
 
     @Override
     public User getUserById(Integer id) {
-        User user= userRepository.findById(id).orElse(null);
+        User user= userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User with userId: ",id.toString()," not found"));
         return user;
     }
 
 
     public User updateUserById(UserDto userDto,Integer id) {
-        User user= userRepository.findById(id).orElse(null);
+        User user= userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User with userId ",id.toString()," not found"));
         if(userDto.getAddress()!=null)
         user.setAddress(userDto.getAddress());
         if(userDto.getEmail()!=null)
