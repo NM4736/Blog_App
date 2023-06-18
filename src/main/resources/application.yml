@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/demo
+    username: root
+    password: Credable
+
+  jpa:
+   database-platform: org.hibernate.dialect.MySQL5InnoDBDialect # this line says hibernate for which plateform
+   # hibernate has to prepare queries so that they can be run on that database without syntax error.
+     #platform can be mysql, postgresql, mangodb etc
+   hibernate:
+     ddl-auto: update  # this line says hibernate that you have to create table each time
+     show-sql: true
+
