@@ -2,6 +2,7 @@ package com.blog_Application.Service;
 
 import com.blog_Application.DTO.PostDTO;
 import com.blog_Application.Entity.Post;
+import com.blog_Application.Response.PostResponse;
 
 import java.util.List;
 
@@ -15,9 +16,13 @@ public interface PostService {
 
     void deletePost(int postId);
 
-    List<PostDTO> getAllPosts();
+   // List<PostDTO> getAllPosts(Integer pageNo, Integer pageSize);
+   PostResponse getAllPosts(Integer pageNo, Integer pageSize);
 
-    List<PostDTO> getPostByUser(Integer userId);
-    List<PostDTO> getPostByCategory(Integer categoryId);
+   // List<PostDTO> getPostByUser(Integer userId);
+    PostResponse getPostByUser(Integer userId, Integer PageNo, Integer PageSize);
+    // List<PostDTO> getPostByCategory(Integer categoryId);
+
+    PostResponse getPostByCategory(Integer userId, Integer PageNo, Integer PageSize);
 
 }

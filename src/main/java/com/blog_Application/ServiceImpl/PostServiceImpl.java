@@ -8,10 +8,14 @@ import com.blog_Application.Entity.Category;
 import com.blog_Application.Entity.Post;
 import com.blog_Application.Entity.User;
 import com.blog_Application.Exception.ResourceNotFoundException;
+import com.blog_Application.Response.PostResponse;
 import com.blog_Application.Service.PostService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -90,26 +94,70 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDTO> getAllPosts() {
-        List<Post> posts = postRepository.findAll();
+    public PostResponse getAllPosts(Integer pageNo, Integer pageSize) {
+
+
+        // 1) create object of page means ek page banao uska no. do or batao ki usme kitni post aani chahiye page size ki madad s.
+        Pageable p  = PageRequest.of(pageNo,pageSize);
+        //2) pass page object to repo means jo upper page banaya h repo ko dedo jisse us page m pagesize itne record
+        // likh kr page return kr d
+        Page<Post> page= postRepository.findAll(p);
+        //3) get post means jo page return hua h upper s uska content read kr lo
+        List<Post> posts= page.getContent();
+
+        //List<Post> posts = postRepository.findAll(); before implementing pagination concept we use to directly return all post
         List<PostDTO> postDTOS = new ArrayList<>();
         postDTOS = posts.stream().map(post -> this.modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
-       return postDTOS;
+
+        // return PostResponse
+        PostResponse postResponse= new PostResponse();
+        postResponse.setPostDTOList(postDTOS);
+        postResponse.setPageNumber(Integer.valueOf(page.getNumber()));
+        postResponse.setPageSize(page.getSize());
+        postResponse.setTotalPages(page.getTotalPages());
+        postResponse.setIsLastPage(page.isLast());
+
+
+       //return postDTOS;
+        return postResponse;
     }
 
     @Override
-    public List<PostDTO> getPostByUser(Integer userId) {
-       List<Post> post= postRepository.getPostByUser(userId);
-       List<PostDTO> postDTOs= post.stream().map( p-> this.modelMapper.map(p, PostDTO.class)).collect(Collectors.toList());
-       return postDTOs;
+    public PostResponse getPostByUser(Integer userId,Integer pageNo, Integer pageSize) {
+
+        Pageable pageObj= PageRequest.of(pageNo,pageSize);
+       Page<Post> page= postRepository.getPostByUser(userId,pageObj);
+        List<Post> posts= page.getContent();
+       List<PostDTO> postDTOs= posts.stream().map( p-> this.modelMapper.map(p, PostDTO.class)).collect(Collectors.toList());
+
+       PostResponse postResponse= new PostResponse();
+       postResponse.setPostDTOList(postDTOs);
+       postResponse.setPageNumber(page.getNumber());
+       postResponse.setPageSize(page.getSize());
+       postResponse.setTotalPages(page.getTotalPages());
+       postResponse.setIsLastPage(page.isLast());
+
+       return postResponse;
     }
 
 
     @Override
-    public List<PostDTO> getPostByCategory(Integer categoryId) {
-        List<Post> post= postRepository.getPostByCategory(categoryId);
+    public PostResponse getPostByCategory(Integer categoryId,Integer pageNo, Integer pageSize) {
+
+
+        Pageable pageObj= PageRequest.of(pageNo,pageSize);
+        Page<Post> page= postRepository.getPostByCategory(categoryId,pageObj);
+        List<Post> post= page.getContent();
         List<PostDTO> postDTOs= post.stream().map( p-> this.modelMapper.map(p, PostDTO.class)).collect(Collectors.toList());
-        return postDTOs;
+
+        PostResponse postResponse= new PostResponse();
+        postResponse.setPostDTOList(postDTOs);
+        postResponse.setTotalPages(page.getTotalPages());
+        postResponse.setPageNumber(page.getNumber());
+        postResponse.setPageSize(page.getSize());
+        postResponse.setIsLastPage(page.isLast());
+
+        return postResponse;
     }
 
 
