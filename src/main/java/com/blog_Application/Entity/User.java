@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
@@ -21,5 +22,17 @@ public class User {
     private String name;
     private String address;
     private String email;
+
+    @OneToMany(mappedBy="user",cascade = CascadeType.ALL)
+    Set<Post> posts;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
 
 }

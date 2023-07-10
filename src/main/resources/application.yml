@@ -12,6 +12,7 @@ spring:
    # hibernate has to prepare queries so that they can be run on that database without syntax error.
      #platform can be mysql, postgresql, mangodb etc
    hibernate:
-     ddl-auto: update  # this line says hibernate that you have to create table each time
+     ddl-auto: update  # this line says hibernate that you have to add new tables, columns, or constraints as required, but it will not drop or modify existing schema objects. Existing data will be preserved.
+     #ddl-auto: update --> this line says hibernate that  you  drop and recreate all the schema objects, including tables, columns, and constraints. This can result in data loss as existing data will be deleted.
      show-sql: true
 
