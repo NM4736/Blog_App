@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PostService {
 
-    PostDTO createPost(PostDTO postDTO);
+    PostDTO createPost(PostDTO postDTO,Integer userId, Integer CategoryId);
 
     PostDTO getPostById(int postId);
 
@@ -16,4 +16,8 @@ public interface PostService {
     void deletePost(int postId);
 
     List<PostDTO> getAllPosts();
+
+    List<PostDTO> getPostByUser(Integer userId);
+    List<PostDTO> getPostByCategory(Integer categoryId);
+
 }

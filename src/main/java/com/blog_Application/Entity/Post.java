@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -19,5 +21,12 @@ public class Post {
     int postId;
     private String postTitle;
     private String postDescription;
+    private String image;
+    private Date datePosted;
+
+    @ManyToOne
+    private User user;
+    @ManyToOne
+    private Category category;
 
 }

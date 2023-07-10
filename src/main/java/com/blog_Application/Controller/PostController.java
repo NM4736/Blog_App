@@ -21,9 +21,11 @@ public class PostController {
         this.postService = postService;
     }
 
-    @PostMapping("/")
-    public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDTO) {
-        PostDTO createdPost = postService.createPost(postDTO);
+    @PostMapping("/user/{userId}/category/{categoryId}")
+    public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDTO,
+                                              @PathVariable(value="userId") Integer userId,
+                                              @PathVariable(value="categoryId") Integer categoryId) {
+        PostDTO createdPost = postService.createPost(postDTO,userId,categoryId);
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
     }
 
@@ -49,5 +51,18 @@ public class PostController {
     public ResponseEntity<String> deletePost(@PathVariable int postId) {
         postService.deletePost(postId);
         return new ResponseEntity<>("Post delete Successfully",HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<PostDTO>> getPostByUser(@PathVariable(value="userId") Integer userId)
+    {
+       List<PostDTO> postDTO= postService.getPostByUser(userId);
+        return new ResponseEntity<>(postDTO,HttpStatus.FOUND);
+    }
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<PostDTO>> getPostByCategory(@PathVariable(value="categoryId") Integer Id)
+    {
+        List<PostDTO> postDTO= postService.getPostByCategory(Id);
+        return new ResponseEntity<>(postDTO,HttpStatus.FOUND);
     }
 }
