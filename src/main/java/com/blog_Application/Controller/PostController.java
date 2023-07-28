@@ -137,7 +137,7 @@ public class PostController {
      httpResponse.setContentType(MediaType.IMAGE_JPEG_VALUE);
         StreamUtils.copy(inputStream, httpResponse.getOutputStream());
 
-        return new ResponseEntity<>("ok",HttpStatus.FOUND);
+        return new ResponseEntity<>("image fetched successfully",HttpStatus.FOUND);
     }
 
 }
