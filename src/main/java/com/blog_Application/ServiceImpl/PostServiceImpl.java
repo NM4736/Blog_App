@@ -11,16 +11,24 @@ import com.blog_Application.Exception.ResourceNotFoundException;
 import com.blog_Application.Response.PostResponse;
 import com.blog_Application.Service.PostService;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +45,8 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     ModelMapper modelMapper;
+    Logger Log= LoggerFactory.getLogger(PostServiceImpl.class);
+
 
 
     @Override
@@ -76,8 +86,10 @@ public class PostServiceImpl implements PostService {
         if(postDTO.getPostDescription()!=null)
         post.setPostDescription(postDTO.getPostDescription());
 
-        if(postDTO.getImage()!=null)
+        if(postDTO.getImage()!=null) {
+            post.setImageName(postDTO.getImageName());
             post.setImage((postDTO.getImage()));
+        }
 
         Post updatedPost = postRepository.save(post);
         PostDTO updatedPostDTO = new PostDTO();
@@ -94,11 +106,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse getAllPosts(Integer pageNo, Integer pageSize) {
+    public PostResponse getAllPosts(Integer pageNo, Integer pageSize,String sortBy,String sortDir) {
+        Sort sortObj=null;
+        if(sortDir.equalsIgnoreCase("ASC"))
+            sortObj= Sort.by(Sort.Direction.ASC,sortBy) ;
+        else
+            sortObj= Sort.by(Sort.Direction.DESC,sortBy) ;
 
 
         // 1) create object of page means ek page banao uska no. do or batao ki usme kitni post aani chahiye page size ki madad s.
-        Pageable p  = PageRequest.of(pageNo,pageSize);
+        Pageable p  = PageRequest.of(pageNo,pageSize,sortObj);
         //2) pass page object to repo means jo upper page banaya h repo ko dedo jisse us page m pagesize itne record
         // likh kr page return kr d
         Page<Post> page= postRepository.findAll(p);
@@ -123,9 +140,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse getPostByUser(Integer userId,Integer pageNo, Integer pageSize) {
+    public PostResponse getPostByUser(Integer userId,Integer pageNo, Integer pageSize,String sortBy,String sortDir) {
 
-        Pageable pageObj= PageRequest.of(pageNo,pageSize);
+        Sort sortObj=null;
+        if(sortDir.equalsIgnoreCase("ASC"))
+           sortObj= Sort.by(Sort.Direction.ASC,sortBy) ;
+        else
+            sortObj= Sort.by(Sort.Direction.DESC,sortBy) ;
+
+        Pageable pageObj= PageRequest.of(pageNo,pageSize,sortObj);
        Page<Post> page= postRepository.getPostByUser(userId,pageObj);
         List<Post> posts= page.getContent();
        List<PostDTO> postDTOs= posts.stream().map( p-> this.modelMapper.map(p, PostDTO.class)).collect(Collectors.toList());
@@ -142,10 +165,16 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public PostResponse getPostByCategory(Integer categoryId,Integer pageNo, Integer pageSize) {
+    public PostResponse getPostByCategory(Integer categoryId,Integer pageNo, Integer pageSize,String sortBy,String sortDir) {
+
+        Sort sortObj=null;
+        if(sortDir.equalsIgnoreCase("ASC"))
+            sortObj= Sort.by(Sort.Direction.ASC,sortBy) ;
+        else
+            sortObj= Sort.by(Sort.Direction.DESC,sortBy) ;
 
 
-        Pageable pageObj= PageRequest.of(pageNo,pageSize);
+        Pageable pageObj= PageRequest.of(pageNo,pageSize,sortObj);
         Page<Post> page= postRepository.getPostByCategory(categoryId,pageObj);
         List<Post> post= page.getContent();
         List<PostDTO> postDTOs= post.stream().map( p-> this.modelMapper.map(p, PostDTO.class)).collect(Collectors.toList());
@@ -159,6 +188,33 @@ public class PostServiceImpl implements PostService {
 
         return postResponse;
     }
+
+    @Override
+    public PostResponse findTitleByKeyword(String word) {
+     List<Post> posts= postRepository.findPostByTitleKeyword(word);
+        if(posts.size()==0)
+            throw new ResourceNotFoundException("Post with"," "+word+" not found");
+        PostResponse postResponse= new PostResponse();
+      List<PostDTO> postDTOs= new ArrayList<>();
+       for(Post post: posts)
+       {
+           PostDTO postDTO= new PostDTO();
+          postDTO=this.modelMapper.map(post,PostDTO.class);
+          postDTOs.add(postDTO);
+       }
+        postResponse.setPostDTOList(postDTOs);
+        return postResponse;
+    }
+
+
+
+
+    @Override
+    public String getFile() {
+        return null;
+    }
+
+
 
 
 }

@@ -22,4 +22,11 @@ class ResourceNotFoundException extends RuntimeException
         this.value=value;
     }
 
+    public ResourceNotFoundException(String ResourceName, String value)
+    {
+        super(String.format("%s %s ",ResourceName,value));
+        this.ResourceName=ResourceName;
+        this.value=value;
+    }
+
 }
