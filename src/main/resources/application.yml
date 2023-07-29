@@ -16,3 +16,10 @@ spring:
      #ddl-auto: update --> this line says hibernate that  you  drop and recreate all the schema objects, including tables, columns, and constraints. This can result in data loss as existing data will be deleted.
      show-sql: true
 
+   servlet:
+     multipart:
+       max-file-size: 10MB
+       max-request-size: 10MB
+project:
+   image: \image
+

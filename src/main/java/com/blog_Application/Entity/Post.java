@@ -22,6 +22,7 @@ public class Post {
     private String postTitle;
     private String postDescription;
     private String image;
+    String imageName;
     private Date datePosted;
 
     @ManyToOne

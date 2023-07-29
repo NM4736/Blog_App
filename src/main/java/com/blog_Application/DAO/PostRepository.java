@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post,Integer>
@@ -19,4 +20,7 @@ public interface PostRepository extends JpaRepository<Post,Integer>
 
     @Query("select p from Post p where p.category.category_id= :id")
     Page<Post> getPostByCategory(@Param(value="id") Integer id,Pageable page);
+
+    @Query("select p from Post p where p.postTitle LIKE %:word%")
+    List<Post> findPostByTitleKeyword(@Param(value="word") String word);
 }
