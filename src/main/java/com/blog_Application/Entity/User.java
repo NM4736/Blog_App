@@ -26,6 +26,9 @@ public class User {
     @OneToMany(mappedBy="user",cascade = CascadeType.ALL)
     Set<Post> posts;
 
+    @OneToMany(mappedBy = "user",cascade =CascadeType.ALL)
+    Set<Comment> comments;
+
     @Override
     public String toString() {
         return "User{" +

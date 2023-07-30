@@ -1,18 +1,18 @@
 package com.blog_Application.DTO;
 
-import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import javax.validation.constraints.NotNull;
 
-import javax.persistence.Entity;
 
 @Data
-@NoArgsConstructor
+
 public class CategoryDto {
 
 
     String categoryTitle;
-    @NotNull
+
+    @NotNull(message = "Category description cannot be null")
     String categoryDescription;
 
 }

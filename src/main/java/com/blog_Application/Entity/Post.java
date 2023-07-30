@@ -2,17 +2,26 @@ package com.blog_Application.Entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.util.Date;
+import java.util.Set;
 
-@Data
+
+
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity
 public class Post {
 
@@ -30,4 +39,22 @@ public class Post {
     @ManyToOne
     private Category category;
 
+    @OneToMany(mappedBy="post", cascade = CascadeType.ALL)
+    Set<Comment> comments;
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "postId=" + postId +
+                ", postTitle='" + postTitle + '\'' +
+                ", postDescription='" + postDescription + '\'' +
+                ", image='" + image + '\'' +
+                ", imageName='" + imageName + '\'' +
+                ", datePosted=" + datePosted +
+                ", userId=" + (user != null ? user.getId() : null) +
+                ", categoryId=" + (category != null ? category.getCategory_id(): null) +
+                '}';
+    }
 }
+
+

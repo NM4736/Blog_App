@@ -3,8 +3,11 @@ package com.blog_Application.ServiceImpl;
 import com.blog_Application.DAO.CategoryRepository;
 import com.blog_Application.DAO.PostRepository;
 import com.blog_Application.DAO.UserRepository;
+import com.blog_Application.DTO.CategoryDto;
+import com.blog_Application.DTO.CommentDto;
 import com.blog_Application.DTO.PostDTO;
 import com.blog_Application.Entity.Category;
+import com.blog_Application.Entity.Comment;
 import com.blog_Application.Entity.Post;
 import com.blog_Application.Entity.User;
 import com.blog_Application.Exception.ResourceNotFoundException;
@@ -43,6 +46,7 @@ public class PostServiceImpl implements PostService {
     @Autowired
     UserRepository userRepository;
 
+
     @Autowired
     ModelMapper modelMapper;
     Logger Log= LoggerFactory.getLogger(PostServiceImpl.class);
@@ -52,7 +56,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDTO createPost(PostDTO postDTO, Integer userId, Integer categoryId) {
 
-                Category category= categoryRepository.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("category with ",""+categoryId," not found"));
+        Category category= categoryRepository.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("category with ",""+categoryId," not found"));
         User user= userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User with userId: ",userId.toString()," not found"));
 
         Post post = new Post();
@@ -71,8 +75,11 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() ->  new ResourceNotFoundException("Post not found with",String.valueOf(postId),"postId"));
 
+
         PostDTO postDTO = new PostDTO();
-        BeanUtils.copyProperties(post, postDTO);// same as model mapper
+
+        postDTO= this.modelMapper.map(post,PostDTO.class);// same as model mapper
+        postDTO.setComment(post.getComments().stream().map(i-> this.modelMapper.map(i,CommentDto.class)).collect(Collectors.toSet()));
         return postDTO;
     }
 

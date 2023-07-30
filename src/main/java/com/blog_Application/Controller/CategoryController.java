@@ -7,10 +7,10 @@ import com.blog_Application.Response.ResonseWO;
 import com.blog_Application.Service.CategoryService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +24,6 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@Validated
 @RequestMapping("/category/")
 public class CategoryController {
     @Autowired
@@ -37,7 +36,7 @@ public class CategoryController {
     Category category;*/
 
     @PostMapping("/")
-    public ResponseEntity<Category> addNewCategory(@RequestBody @Valid CategoryDto categoryDto) {
+    public ResponseEntity<Category> addNewCategory( @RequestBody @Valid CategoryDto categoryDto) {
         Category category = categoryService.addNewCategory(categoryDto);
         return new ResponseEntity<Category>(category, HttpStatus.CREATED);
     }
