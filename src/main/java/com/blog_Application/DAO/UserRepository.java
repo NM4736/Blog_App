@@ -22,13 +22,11 @@ public interface UserRepository extends JpaRepository<User,Integer>
 
 
 @Modifying
- @Query("delete from User u where u.name= :name")
- void deleteByUserName(@Param(value="name")  String name);
+ @Query("delete from User u where u.email= :email")
+ void deleteByUserName(@Param(value="email")  String email);
 
-
-
-@Query("select u from User u where u.name=:Name")
-Optional<User> findByName(@Param("Name") String name);
+@Query("select u from User u where u.email=:email")
+Optional<User> findByName(@Param("email") String email);
 }
 
 

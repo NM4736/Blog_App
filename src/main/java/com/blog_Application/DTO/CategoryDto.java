@@ -2,6 +2,8 @@ package com.blog_Application.DTO;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 
@@ -12,7 +14,7 @@ public class CategoryDto {
 
     String categoryTitle;
 
-    @NotNull(message = "Category description cannot be null")
+    @NotEmpty(message = "Category description cannot be null")
     String categoryDescription;
 
 }

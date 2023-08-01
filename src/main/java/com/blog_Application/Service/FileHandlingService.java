@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public interface FileHandlingService {
-    public String uploadFile(String path, MultipartFile file) throws Exception;
-    public InputStream getFile(String path, String fileName) throws FileNotFoundException;
+    String uploadFile(String path, MultipartFile file) throws Exception;
+    InputStream getFile(String path, String fileName) throws FileNotFoundException;
 
 
 }
