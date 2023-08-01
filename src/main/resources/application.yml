@@ -20,6 +20,18 @@ spring:
      multipart:
        max-file-size: 10MB
        max-request-size: 10MB
+  security:
+    user:          #custom name, password and role
+        name: Nitesh
+        password: Mukati
+        role: ADMIN
 project:
    image: \image
+
+logging:
+  level:
+    org:
+     sprigframework:
+      security: DEBUG
+
 

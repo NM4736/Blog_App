@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Data
@@ -19,6 +20,7 @@ public class Category {
     @GeneratedValue(strategy= GenerationType.AUTO)
     int category_id;
     String categoryTitle;
+
     String categoryDescription;
     @OneToMany(mappedBy="category",cascade = CascadeType.ALL)
     Set<Post> posts;

@@ -29,6 +29,6 @@ public interface PostService {
     PostResponse findTitleByKeyword(String word);
 
 
-    public String getFile();
+    String getFile();
 
 }

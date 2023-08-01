@@ -14,8 +14,7 @@ public class GlobalExceptionHandler
        String message= ex.getResourceName();
        message+= ex.getValue();
        message+= ex.getResourcefield();
-       ;
-       ApiResponse apiResponse= new ApiResponse(message);
+        ApiResponse apiResponse= new ApiResponse(message);
        return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
     }
 }
