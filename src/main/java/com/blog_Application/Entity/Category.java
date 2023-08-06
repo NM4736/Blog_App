@@ -27,6 +27,5 @@ public class Category {
 
     public String toString()
     {
-        return "Category"+ category_id + "Category Name"+ categoryTitle;
-
+        return null;
     }}

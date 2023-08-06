@@ -1,24 +1,37 @@
 package com.blog_Application.ServiceImpl;
 
+import com.blog_Application.DAO.RoleRepo;
 import com.blog_Application.DAO.UserRepository;
 import com.blog_Application.DTO.UserDto;
+import com.blog_Application.Entity.Role;
 import com.blog_Application.Entity.User;
 import com.blog_Application.Exception.ResourceNotFoundException;
+import com.blog_Application.Service.Constants;
 import com.blog_Application.Service.UserService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
 
+    @Autowired
+    RoleRepo roleRepo;
+    Constants constants= new Constants();
+    @Autowired
+    PasswordEncoder passwordEncoder;
+    @Autowired
+    ModelMapper modelMapper;
     Logger log= LoggerFactory.getLogger(UserServiceImpl.class);
     @Autowired
     UserRepository userRepository;
@@ -67,8 +80,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto registerUser(UserDto userDto) {
+        User user = this.modelMapper.map(userDto,User.class);
+        user.setPassword(this.passwordEncoder.encode(userDto.getPassword()));
+
+        Role role=roleRepo.findById(constants.NORMAL_USER).get();
+        user.getRole().add(role);
+        userRepository.save(user);
+
+     return this.modelMapper.map(user,UserDto.class);
+    }
+
+    @Override
     public List<User> getAllUser() {
         List<User> users= userRepository.findAll();
+
         return users;
     }
 }

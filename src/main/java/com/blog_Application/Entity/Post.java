@@ -44,16 +44,7 @@ public class Post {
 
     @Override
     public String toString() {
-        return "Post{" +
-                "postId=" + postId +
-                ", postTitle='" + postTitle + '\'' +
-                ", postDescription='" + postDescription + '\'' +
-                ", image='" + image + '\'' +
-                ", imageName='" + imageName + '\'' +
-                ", datePosted=" + datePosted +
-                ", userId=" + (user != null ? user.getId() : null) +
-                ", categoryId=" + (category != null ? category.getCategory_id(): null) +
-                '}';
+        return null;
     }
 }
 
