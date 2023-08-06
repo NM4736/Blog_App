@@ -12,5 +12,7 @@ public interface UserService {
     User getUserById(Integer id);
     User updateUserById(UserDto userDto,Integer id);
 
+    UserDto registerUser(UserDto userDto);
+
     List<User> getAllUser();
 }
